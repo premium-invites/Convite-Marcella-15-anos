@@ -3,113 +3,917 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#06142a">
-  <meta name="description" content="Convite especial dos 15 anos da Marcella. 27 de fevereiro de 2027, às 20h.">
-  <link rel="canonical" href="https://premium-invites.github.io/Convite-Marcella-15-anos/">
-  <link rel="image_src" href="https://premium-invites.github.io/Convite-Marcella-15-anos/assets/preview-whatsapp.jpg">
 
-  <meta property="og:locale" content="pt_BR">
+  <!-- ====================================================================
+       META TAGS DE PREVIEW (WHATSAPP / FACEBOOK / TWITTER)
+       --------------------------------------------------------------------
+       O crawler que gera o preview do WhatsApp NÃO executa JavaScript,
+       então estas tags não podem vir do config.js — precisam ficar aqui.
+       Edite este bloco APENAS ao trocar o nome do aniversariante ou o
+       link do repositório (URL_BASE abaixo). O resto da engine é automático.
+       ==================================================================== -->
+  <meta name="theme-color" content="#f6c1cd">
+  <title>Convite 15 anos Maria Helena</title>
+
+  <!-- Cole aqui a URL base do convite publicado no GitHub Pages -->
+  <!-- Ex.: https://convitepremium.github.io/convite-premium-Joao/ -->
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Convite Marcella — 15 anos">
-  <meta property="og:url" content="https://premium-invites.github.io/Convite-Marcella-15-anos/">
-  <meta property="og:title" content="Marcella — 15 anos">
-  <meta property="og:description" content="27/02/2027 às 20h. Clique para abrir o convite.">
-  <meta property="og:image" content="https://premium-invites.github.io/Convite-Marcella-15-anos/assets/preview-whatsapp.jpg">
-  <meta property="og:image:secure_url" content="https://premium-invites.github.io/Convite-Marcella-15-anos/assets/preview-whatsapp.jpg">
+  <meta property="og:title" content="Convite 15 anos Maria Helena">
+  <meta property="og:description" content="Clique para abrir o convite">
+  <meta property="og:url" content="https://convitepremium.github.io/convites-premium-Maria-Helena/">
+  <meta property="og:image" content="https://convitepremium.github.io/convites-premium-Maria-Helena/assets/preview-whatsapp.jpg">
+  <meta property="og:image:secure_url" content="https://convitepremium.github.io/convites-premium-Maria-Helena/assets/preview-whatsapp.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Convite de 15 anos da Marcella em azul-marinho e dourado">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Marcella — 15 anos">
-  <meta name="twitter:description" content="27/02/2027 às 20h. Clique para abrir o convite.">
-  <meta name="twitter:image" content="https://premium-invites.github.io/Convite-Marcella-15-anos/assets/preview-whatsapp.jpg">
+  <meta name="twitter:title" content="Convite 15 anos Maria Helena">
+  <meta name="twitter:description" content="Clique para abrir o convite">
+  <meta name="twitter:image" content="https://convitepremium.github.io/convites-premium-Maria-Helena/assets/preview-whatsapp.jpg">
+  <!-- Fim do bloco de preview -->
 
-  <title>Marcella — 15 anos</title>
   <link rel="preload" href="assets/opening.webp" as="image">
-  <link rel="preload" href="assets/principal.webp" as="image">
-  <link rel="stylesheet" href="styles.css">
-  <script src="config.js" defer></script>
-  <script src="app.js" defer></script>
+  <link rel="preload" href="assets/video.mp4" as="video" type="video/mp4">
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+    .screen{position:fixed;inset:0;display:none;background:#000;align-items:center;justify-content:center;overflow:hidden}
+    .screen.active{display:flex}
+    .screen::before{content:"";position:absolute;inset:-24px;background:var(--bg-img) center/cover no-repeat;filter:blur(18px);transform:scale(1.08);opacity:.55}
+    .stage{position:relative;z-index:1;height:100%;max-height:100svh;aspect-ratio:941/1672;max-width:100vw}
+    .art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none;z-index:1}
+    #opening{cursor:pointer;--bg-img:url('assets/opening.webp')}
+    #mainScreen{--bg-img:url('assets/principal.webp')}
+    #giftScreen{--bg-img:url('assets/presentes.webp')}
+    #dressScreen{--bg-img:url('assets/dresscode.webp')}
+    #manualScreen{--bg-img:url('assets/manual.webp')}
+    #countdownScreen{--bg-img:url('assets/contagem.webp')}
+    #videoScreen{--bg-img:url('assets/principal.webp')}
+    #videoPlayer{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:contain;background:#000}
+    .hotspot{position:absolute;border:0;background:transparent;cursor:pointer;z-index:5}
+    .pix-copy{position:absolute;border:0;background:transparent;cursor:pointer;z-index:6}
+    .copy-toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%) translateY(12px);z-index:50;background:rgba(0,0,0,.84);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:.2s ease;white-space:nowrap}
+    .copy-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .countdown-box{position:absolute;z-index:5;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;justify-items:center;column-gap:var(--count-gap,8px);padding:var(--count-padding,8px);text-align:center;color:var(--count-number,#fff);font-variant-numeric:tabular-nums;overflow:visible}
+    .countdown-item{width:100%;min-width:0;text-shadow:0 2px 8px rgba(0,0,0,.48);display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .countdown-value{display:block;font-size:var(--count-value-size,34px);font-weight:900;line-height:1;white-space:nowrap}
+    .countdown-label{display:block;margin-top:var(--count-label-gap,5px);font-size:var(--count-label-size,11px);font-weight:800;line-height:1.15;letter-spacing:.08em;text-transform:uppercase;color:var(--count-label,#fff);white-space:nowrap}
+    .countdown-message{font-size:clamp(18px,4.4vw,38px);font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.48)}
+    body.editor-on .countdown-box{background:rgba(255,170,40,.22);outline:2px solid rgba(255,255,255,.95);border-radius:10px}
+    body.editor-on .countdown-box::before{content:"Contador";position:absolute;left:6px;top:6px;background:#fff;color:#7b3650;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:800;box-shadow:0 2px 8px #0004}
+    body.editor-on .countdown-box.selected{background:rgba(50,180,255,.28);outline:3px solid #fff}
+    body.editor-on .countdown-box .resize{position:absolute;right:-7px;bottom:-7px;width:18px;height:18px;background:#fff;border:2px solid #7b3650;border-radius:50%;box-shadow:0 2px 8px #0006}
+    .back{position:absolute;top:calc(env(safe-area-inset-top) + 14px);left:14px;z-index:10;border:0;border-radius:999px;padding:10px 14px;background:var(--back-bg,rgba(255,255,255,.76));color:var(--back-color,#6b3a21);font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.22);cursor:pointer}
+    .back.text-hidden{background:transparent!important;color:transparent!important;box-shadow:none!important;padding:0!important}
+    body.editor-on .back{outline:2px dashed rgba(255,255,255,.95);background:rgba(70,160,255,.28)!important;color:#fff!important;box-shadow:none}
+    body.editor-on .back::after{content:attr(data-label);position:absolute;left:4px;top:4px;background:#fff;color:#7b3650;border-radius:999px;padding:3px 7px;font-size:11px;font-weight:800;white-space:nowrap}
+    body.editor-on .back.selected{outline:3px solid #fff}
+    body.editor-on .back .resize{position:absolute;right:-7px;bottom:-7px;width:18px;height:18px;background:#fff;border:2px solid #7b3650;border-radius:50%;box-shadow:0 2px 8px #0006}
+    .skip{position:absolute;top:calc(env(safe-area-inset-top) + 14px);right:14px;z-index:10;border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:10px 16px;background:rgba(255,255,255,.22);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.45);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+    .loading{position:absolute;bottom:28px;left:0;right:0;text-align:center;color:#fff;text-shadow:0 2px 8px #000;font-size:14px;opacity:.85}
+    .tap-btn{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);z-index:6;border:1px solid rgba(255,255,255,.72);border-radius:999px;padding:12px 22px;background:rgba(255,255,255,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;text-shadow:0 1px 5px rgba(0,0,0,.55);box-shadow:0 8px 22px rgba(0,0,0,.20);animation:pulse 1.8s ease-in-out infinite}
+    .music-unlock{display:none;position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%);z-index:12;border:1px solid rgba(255,255,255,.65);border-radius:999px;padding:11px 18px;background:rgba(255,255,255,.20);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-size:13px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;text-shadow:0 1px 5px rgba(0,0,0,.55);box-shadow:0 8px 22px rgba(0,0,0,.22)}
+    body.need-music #musicUnlock{display:block}
+    .fade-out{animation:fadeOut .75s ease forwards}.fade-in{animation:fadeIn .75s ease forwards}
+    @keyframes pulse{0%,100%{transform:translateX(-50%) scale(1);opacity:.88}50%{transform:translateX(-50%) scale(1.035);opacity:1}}
+    @keyframes fadeOut{to{opacity:0;filter:blur(8px)}}@keyframes fadeIn{from{opacity:0;filter:blur(8px)}to{opacity:1;filter:blur(0)}}
+    body.editor-on .hotspot{background:rgba(255,70,120,.22);outline:2px solid rgba(255,255,255,.9);border-radius:10px}
+    body.editor-on .hotspot::after{content:attr(data-label);position:absolute;left:6px;top:6px;background:#fff;color:#7b3650;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:800;box-shadow:0 2px 8px #0004;white-space:nowrap}
+    body.editor-on .hotspot.selected{background:rgba(50,180,255,.28);outline:3px solid #fff}
+    body.editor-on .hotspot .resize{position:absolute;right:-7px;bottom:-7px;width:18px;height:18px;background:#fff;border:2px solid #7b3650;border-radius:50%;box-shadow:0 2px 8px #0006}
+    /* PIX: hotspot independente e visível somente no editor */
+    body.editor-on .pix-copy{background:rgba(255,170,40,.28);outline:2px solid rgba(255,255,255,.95);border-radius:10px;z-index:11}
+    body.editor-on .pix-copy::after{content:attr(data-label);position:absolute;left:6px;top:6px;background:#fff;color:#7b3650;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:800;box-shadow:0 2px 8px #0004;white-space:nowrap}
+    body.editor-on .pix-copy.selected{background:rgba(50,180,255,.32);outline:3px solid #fff}
+    body.editor-on .pix-copy .resize{position:absolute;right:-7px;bottom:-7px;width:18px;height:18px;background:#fff;border:2px solid #7b3650;border-radius:50%;box-shadow:0 2px 8px #0006}
+    .editor-panel{
+  display:none;
+  position:fixed;
+  left:12px;
+  right:12px;
+  top:12px;
+  bottom:auto;
+  z-index:50;
+  max-width:560px;
+  margin:auto;
+  background:rgba(255,255,255,.94);
+  color:#4b2634;
+  border-radius:18px;
+  padding:12px;
+  box-shadow:0 12px 34px #0006;
+  font-size:13px;
+}
+    .editor-drag-handle{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:move;touch-action:none;user-select:none;padding:2px 2px 8px;border-bottom:1px solid rgba(213,168,183,.65)}
+    .editor-drag-handle button{cursor:pointer;flex:0 0 auto;padding:6px 9px!important;font-size:12px}
+    .editor-panel.dragging{opacity:.96;box-shadow:0 16px 42px #0008}
+    body.editor-on .editor-panel{display:block}.editor-panel b{font-size:14px}.editor-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}.editor-panel button,.editor-panel select,.editor-panel input{border:1px solid #d5a8b7;border-radius:10px;padding:8px;background:#fff;color:#4b2634;font-weight:700}.editor-panel input{width:74px}.editor-panel textarea{width:100%;height:78px;margin-top:8px;border:1px solid #d5a8b7;border-radius:10px;padding:8px;font-size:12px}.editor-mini{opacity:.75;font-size:12px;margin-top:6px}.edit-open{display:none;position:fixed;right:12px;bottom:12px;z-index:45;border:0;border-radius:999px;padding:10px 13px;background:rgba(255,255,255,.88);color:#6b3a21;font-weight:800;box-shadow:0 4px 16px #0004}body.can-edit .edit-open{display:block}body.editor-on .edit-open{display:none}
+  </style>
 </head>
 <body>
-  <main id="inviteApp">
-    <section class="screen active" id="openingScreen" aria-label="Abertura do convite" style="--screen-bg:url('assets/opening.webp')">
+  <main>
+    <section id="opening" class="screen active" aria-label="Abrir convite">
       <div class="stage">
-        <img class="art" src="assets/opening.webp" alt="Envelope azul-marinho com laço e joia azul">
-        <button class="opening-action" id="openInvite" type="button">TOQUE PARA ABRIR</button>
+        <img class="art" src="assets/opening.webp" alt="Clique para abrir o convite" width="941" height="1672">
+        <button class="tap-btn" id="tapBtn" type="button" aria-label="Abrir convite">Toque para abrir</button>
       </div>
     </section>
 
-    <section class="screen" id="mainScreen" aria-label="Convite principal" style="--screen-bg:url('assets/principal.webp')">
+    <section id="videoScreen" class="screen" aria-label="Vídeo do convite">
+      <div class="stage"><video id="videoPlayer" src="assets/video.mp4" preload="metadata" playsinline webkit-playsinline></video></div>
+      <button class="skip" id="skipBtn" type="button">Pular vídeo</button>
+    </section>
+
+    <section id="mainScreen" class="screen" aria-label="Convite principal">
       <div class="stage" id="mainStage">
-        <img class="art" src="assets/principal.webp" alt="Convite de 15 anos da Marcella, 27 de fevereiro de 2027 às 20h">
-        <button class="hotspot" type="button" data-key="confirm" aria-label="Confirmar presença"></button>
-        <button class="hotspot" type="button" data-key="location" aria-label="Abrir localização"></button>
-        <button class="hotspot" type="button" data-key="gifts" aria-label="Ver sugestões de presentes"></button>
-        <button class="hotspot" type="button" data-key="dress" aria-label="Ver dress code"></button>
-        <button class="hotspot" type="button" data-key="manual" aria-label="Ver manual do convidado"></button>
+        <img class="art" src="assets/principal.webp" alt="Convite" loading="eager" width="941" height="1672">
+        <button class="hotspot" id="confirmBtn" data-key="confirm" data-label="WhatsApp" aria-label="Confirmar presença"></button>
+        <button class="hotspot" id="mapBtn" data-key="map" data-label="Localização" aria-label="Abrir localização"></button>
+        <button class="hotspot" id="giftBtn" data-key="gift" data-label="Presentes" aria-label="Ver sugestões de presentes"></button>
+        <button class="hotspot" id="dressBtn" data-key="dress" data-label="Dress Code" aria-label="Ver dress code"></button>
+        <button class="hotspot" id="manualBtn" data-key="manual" data-label="Manual do Convidado" aria-label="Ver manual do convidado"></button>
+        <button class="hotspot" id="countdownBtn" data-key="countdown" data-label="Contagem" aria-label="Ver contagem regressiva"></button>
       </div>
     </section>
 
-    <section class="screen" id="giftsScreen" aria-label="Sugestões de presentes" style="--screen-bg:url('assets/presentes.webp')">
-      <div class="stage">
-        <img class="art" src="assets/presentes.webp" alt="Sugestões de presentes da Marcella">
-        <button class="hotspot back-hotspot" type="button" data-key="backGifts" aria-label="Voltar para a página inicial"></button>
+    <section id="giftScreen" class="screen" aria-label="Sugestões de presentes">
+      <div class="stage" id="giftStage">
+        <img class="art" src="assets/presentes.webp" alt="Sugestões de presentes" loading="lazy" width="941" height="1672">
+        <button class="pix-copy" id="pixCopyBtn" data-key="pix" data-label="PIX (copiar chave)" aria-label="Copiar chave PIX"></button>
+        <button class="back" id="backBtn" data-key="backGift" data-label="Voltar — Presentes">Voltar</button>
       </div>
     </section>
 
-    <section class="screen" id="dressScreen" aria-label="Dress Code" style="--screen-bg:url('assets/dresscode.webp')">
-      <div class="stage">
-        <img class="art" src="assets/dresscode.webp" alt="Dress Code: esporte fino; evitar azul-marinho e rosa">
-        <button class="hotspot back-hotspot" type="button" data-key="backDress" aria-label="Voltar para a página inicial"></button>
+    <section id="dressScreen" class="screen" aria-label="Dress code">
+      <div class="stage" id="dressStage">
+        <img class="art" src="assets/dresscode.webp" alt="Dress code" loading="lazy" width="941" height="1672">
+        <button class="back" id="dressBackBtn" data-key="backDress" data-label="Voltar — Dress Code">Voltar</button>
       </div>
     </section>
 
-    <section class="screen" id="manualScreen" aria-label="Manual do Convidado" style="--screen-bg:url('assets/manual.webp')">
-      <div class="stage">
-        <img class="art" src="assets/manual.webp" alt="Manual do Convidado da Marcella; celebração às 20h">
-        <button class="hotspot back-hotspot" type="button" data-key="backManual" aria-label="Voltar para a página inicial"></button>
+    <section id="manualScreen" class="screen" aria-label="Manual do convidado">
+      <div class="stage" id="manualStage">
+        <img class="art" src="assets/manual.webp" alt="Manual do convidado" loading="lazy" width="941" height="1672">
+        <button class="back" id="manualBackBtn" data-key="backManual" data-label="Voltar — Manual do Convidado">Voltar</button>
+      </div>
+    </section>
+
+    <section id="countdownScreen" class="screen" aria-label="Contagem regressiva">
+      <div class="stage" id="countdownStage">
+        <img class="art" src="assets/contagem.webp" alt="Contagem regressiva" loading="lazy" width="941" height="1672">
+        <div class="countdown-box" id="countdownBox" data-key="counter" aria-live="polite">
+          <div class="countdown-item"><span class="countdown-value" id="countMonths">00</span><span class="countdown-label">Meses</span></div>
+          <div class="countdown-item"><span class="countdown-value" id="countDays">00</span><span class="countdown-label">Dias</span></div>
+          <div class="countdown-item"><span class="countdown-value" id="countHours">00</span><span class="countdown-label">Horas</span></div>
+          <div class="countdown-item"><span class="countdown-value" id="countMinutes">00</span><span class="countdown-label">Min</span></div>
+          <div class="countdown-item"><span class="countdown-value" id="countSeconds">00</span><span class="countdown-label">Seg</span></div>
+        </div>
+        <button class="back" id="countdownBackBtn" data-key="backCountdown" data-label="Voltar — Contagem">Voltar</button>
       </div>
     </section>
   </main>
+  <div class="copy-toast" id="copyToast" role="status" aria-live="polite">Chave PIX copiada!</div>
+
+  <!-- Botão global: aparece também durante o vídeo quando o iPhone bloquear o MP3 -->
+  <button class="music-unlock" id="musicUnlock" type="button">Ativar música</button>
 
   <button class="edit-open" id="editOpen" type="button">Editar áreas</button>
+  <div class="editor-panel" id="editorPanel">
+    <div class="editor-drag-handle" id="editorDragHandle">
+      <b>Editor de áreas de clique</b>
+      <button id="centerEditor" type="button" title="Centralizar painel">Centralizar</button>
+    </div>
+    <div class="editor-mini">Arraste o painel pela barra acima. Arraste a área no convite e puxe a bolinha no canto para aumentar/diminuir. Use <b>?editor=1</b> no link para abrir este editor.</div>
+    <div class="editor-row">
+      <select id="areaSelect"><option value="confirm">WhatsApp</option><option value="map">Localização</option><option value="gift">Presentes</option><option value="dress">Dress Code</option><option value="manual">Manual do Convidado</option><option value="countdown">Contagem (botão)</option><option value="counter">Contador (na tela)</option></select>
+      <label>L <input id="inpL" type="number" step="0.1"></label>
+      <label>T <input id="inpT" type="number" step="0.1"></label>
+      <label>W <input id="inpW" type="number" step="0.1"></label>
+      <label>H <input id="inpH" type="number" step="0.1"></label>
+    </div>
+    <div class="editor-row" id="backTextRow" style="display:none">
+      <label><input id="showBackText" type="checkbox" checked> Mostrar texto “Voltar”</label>
+    </div>
+    <div class="editor-row">
+      <button id="saveAreas" type="button">Salvar neste navegador</button>
+      <button id="resetAreas" type="button">Resetar</button>
+      <button id="copyAreas" type="button">Copiar código</button>
+      <button id="closeEditor" type="button">Fechar</button>
+    </div>
+    <textarea id="exportBox" readonly placeholder="Aqui aparece o código para colar no config.js e deixar permanente."></textarea>
+  </div>
 
-  <aside class="editor-panel" id="editorPanel" hidden aria-label="Editor de áreas do convite">
-    <div class="editor-head">
-      <strong>Editor do convite</strong>
-      <button id="closeEditor" type="button" class="small-button">Fechar</button>
-    </div>
-    <p class="editor-help">Escolha uma área no menu ou toque em uma marcação no convite. Arraste para mover e use a alça para redimensionar.</p>
-    <div class="editor-grid">
-      <label class="wide">Área
-        <select id="areaSelect">
-          <option value="confirm">Confirmar presença</option>
-          <option value="location">Localização</option>
-          <option value="gifts">Sugestões de presentes</option>
-          <option value="dress">Dress Code</option>
-          <option value="manual">Manual do Convidado</option>
-          <option value="backGifts">Voltar — Presentes</option>
-          <option value="backDress">Voltar — Dress Code</option>
-          <option value="backManual">Voltar — Manual</option>
-        </select>
-      </label>
-      <label>Esquerda (%) <input id="leftInput" type="number" min="0" max="100" step="0.1"></label>
-      <label>Topo (%) <input id="topInput" type="number" min="0" max="100" step="0.1"></label>
-      <label>Largura (%) <input id="widthInput" type="number" min="1" max="100" step="0.1"></label>
-      <label>Altura (%) <input id="heightInput" type="number" min="1" max="100" step="0.1"></label>
-      <label class="wide">Rótulo no editor <input id="labelInput" type="text"></label>
-      <label class="wide visibility"><input id="visibleInput" type="checkbox"> Mostrar este botão no convite publicado</label>
-    </div>
-    <div class="editor-actions">
-      <button id="saveLocal" type="button">Salvar neste navegador</button>
-      <button id="copyConfig" type="button">Copiar configuração</button>
-      <button id="resetAreas" type="button">Restaurar padrão</button>
-    </div>
-    <textarea id="exportCode" readonly aria-label="Configuração para copiar"></textarea>
-    <p class="editor-status" id="editorStatus" role="status"></p>
-  </aside>
-  <noscript>Ative o JavaScript para abrir o convite interativo.</noscript>
+  <audio id="music" src="assets/musica.mp3" preload="auto" loop></audio>
+
+  <!-- config.js DEVE carregar antes da engine -->
+  <script src="config.js"></script>
+  <script>
+    /* ========================================================================
+       ENGINE V4 MODULAR — lê tudo de config.js. Não edite por convite.
+       ======================================================================== */
+    (function(){
+      const CFG = window.CONFIG || {};
+      const C = {
+        nome: CFG.nome || "Convidado",
+        whatsapp: CFG.whatsapp || { numero: "", mensagem: "Olá!" },
+        mapa: CFG.mapa || "#",
+        pix: Object.assign({ ativo:false, chave:"", posicao:{left:20,top:65,width:60,height:10} }, CFG.pix || {}),
+        telas: Object.assign({
+          video:true,
+          whatsapp:true,
+          localizacao:true,
+          presentes:true,
+          dresscode:true,
+          manual:true,
+          contagem:true
+        }, CFG.telas || {}),
+        textos: Object.assign(
+          { abrir:"Toque para abrir", pularVideo:"Pular vídeo", voltar:"Voltar", ativarMusica:"Ativar música" },
+          CFG.textos || {}
+        ),
+        tema: Object.assign(
+          { cor:"#f6c1cd", corBotaoVoltar:"rgba(255,255,255,.76)", corTextoBotaoVoltar:"#6b3a21" },
+          CFG.tema || {}
+        ),
+        botoesVoltar: Object.assign({
+          presentes:{mostrarTexto:true,posicao:{left:3.7,top:1.5,width:20,height:6}},
+          dresscode:{mostrarTexto:true,posicao:{left:3.7,top:1.5,width:20,height:6}},
+          manual:{mostrarTexto:true,posicao:{left:3.7,top:1.5,width:20,height:6}},
+          contagem:{mostrarTexto:true,posicao:{left:3.7,top:1.5,width:20,height:6}}
+        }, CFG.botoesVoltar || {}),
+        hotspots: CFG.hotspots || {
+          confirm:{left:18.5,top:68.8,width:20.5,height:11.2},
+          map:{left:39.5,top:68.8,width:20.5,height:11.2},
+          gift:{left:60.5,top:68.8,width:18.0,height:11.2},
+          dress:{left:79.5,top:68.8,width:18.0,height:11.2},
+          manual:{left:20.0,top:82.0,width:18.0,height:10.0},
+          countdown:{left:39.5,top:82.0,width:21.0,height:10.0}
+        },
+        contagem: Object.assign({
+          dataEvento:"2026-12-20T19:30:00",
+          textoFinal:"A festa começou!",
+          corNumero:"#ffffff",
+          corLegenda:"#ffffff",
+          posicao:{left:8,top:48,width:84,height:16}
+        }, CFG.contagem || {}),
+        musica: Object.assign({ volume:0.30 }, CFG.musica || {})
+      };
+
+      // Compatibilidade: aceita "contagem" ou "countdown" dentro de hotspots.
+      // O nome oficial usado pela Engine é "countdown".
+      if(C.hotspots.contagem && !C.hotspots.countdown){
+        C.hotspots.countdown = C.hotspots.contagem;
+      }
+      delete C.hotspots.contagem;
+
+      // ---- APLICAÇÃO DO CONFIG NO DOM ------------------------------------
+      document.title = "Convite " + C.nome;
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if(themeMeta) themeMeta.setAttribute("content", C.tema.cor);
+      const root = document.documentElement;
+      root.style.setProperty("--back-bg", C.tema.corBotaoVoltar);
+      root.style.setProperty("--back-color", C.tema.corTextoBotaoVoltar);
+      root.style.setProperty("--count-number", C.contagem.corNumero);
+      root.style.setProperty("--count-label", C.contagem.corLegenda);
+
+      // Textos dos botões
+      const tapBtn = document.getElementById("tapBtn");
+      const skipBtn = document.getElementById("skipBtn");
+      const backBtn = document.getElementById("backBtn");
+      const musicUnlock = document.getElementById("musicUnlock");
+      if(tapBtn) tapBtn.textContent = C.textos.abrir;
+      if(skipBtn) skipBtn.textContent = C.textos.pularVideo;
+      if(backBtn) backBtn.textContent = C.textos.voltar;
+      if(document.getElementById("dressBackBtn")) document.getElementById("dressBackBtn").textContent = C.textos.voltar;
+      if(document.getElementById("manualBackBtn")) document.getElementById("manualBackBtn").textContent = C.textos.voltar;
+      if(document.getElementById("countdownBackBtn")) document.getElementById("countdownBackBtn").textContent = C.textos.voltar;
+      if(musicUnlock) musicUnlock.textContent = C.textos.ativarMusica;
+
+      // Telas ligáveis/desligáveis
+      const hasVideo = !!C.telas.video;
+      const hasWhatsapp = !!C.telas.whatsapp;
+      const hasMap = !!C.telas.localizacao;
+      const hasGift = !!C.telas.presentes;
+      const hasPix = hasGift && !!C.pix.ativo;
+      const hasDress = !!C.telas.dresscode;
+      const hasManual = !!C.telas.manual;
+      const hasCountdown = !!C.telas.contagem;
+
+      const featureEnabled = {
+        confirm: hasWhatsapp,
+        map: hasMap,
+        gift: hasGift,
+        pix: hasPix,
+        dress: hasDress,
+        manual: hasManual,
+        countdown: hasCountdown,
+        counter: hasCountdown,
+        backGift: hasGift,
+        backDress: hasDress,
+        backManual: hasManual,
+        backCountdown: hasCountdown
+      };
+
+      // Hotspots (com override opcional do localStorage, para o editor)
+      const STORAGE_KEY = "convite-hotspots-v2:" + location.pathname;
+      const $ = (id)=>document.getElementById(id);
+      const buttons = {
+        confirm: document.getElementById("confirmBtn"),
+        map: document.getElementById("mapBtn"),
+        gift: document.getElementById("giftBtn"),
+        pix: document.getElementById("pixCopyBtn"),
+        dress: document.getElementById("dressBtn"),
+        manual: document.getElementById("manualBtn"),
+        countdown: document.getElementById("countdownBtn"),
+        counter: document.getElementById("countdownBox"),
+        backGift: document.getElementById("backBtn"),
+        backDress: document.getElementById("dressBackBtn"),
+        backManual: document.getElementById("manualBackBtn"),
+        backCountdown: document.getElementById("countdownBackBtn")
+      };
+      let HOTSPOTS = {};
+      Object.entries(C.hotspots || {}).forEach(([key,value])=>{
+        if(featureEnabled[key]) HOTSPOTS[key] = JSON.parse(JSON.stringify(value));
+      });
+      if(hasPix) HOTSPOTS.pix = JSON.parse(JSON.stringify(C.pix.posicao));
+      if(hasCountdown) HOTSPOTS.counter = JSON.parse(JSON.stringify(C.contagem.posicao));
+      if(hasGift) HOTSPOTS.backGift = JSON.parse(JSON.stringify((C.botoesVoltar.presentes||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
+      if(hasDress) HOTSPOTS.backDress = JSON.parse(JSON.stringify((C.botoesVoltar.dresscode||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
+      if(hasManual) HOTSPOTS.backManual = JSON.parse(JSON.stringify((C.botoesVoltar.manual||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
+      if(hasCountdown) HOTSPOTS.backCountdown = JSON.parse(JSON.stringify((C.botoesVoltar.contagem||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
+
+      // O editor só reaplica posições salvas para recursos que continuam ativos.
+      // Assim um botão desativado no config.js nunca reaparece pelo localStorage.
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        Object.entries(saved).forEach(([key,value])=>{
+          if(featureEnabled[key] && HOTSPOTS[key]) HOTSPOTS[key] = value;
+        });
+      } catch(e){}
+
+      // Remove de verdade os hotspots e telas desativados.
+      $("showBackText").addEventListener("change",()=>{
+        if(!selected.startsWith("back")) return;
+        backTextConfig[selected] = $("showBackText").checked;
+        applyBackText(); exportAreas();
+      });
+
+      Object.entries(buttons).forEach(([key,el])=>{
+        if(el && !featureEnabled[key]) el.remove();
+      });
+      if(!hasGift) $("giftScreen")?.remove();
+      if(!hasDress) $("dressScreen")?.remove();
+      if(!hasManual) $("manualScreen")?.remove();
+      if(!hasCountdown) $("countdownScreen")?.remove();
+
+      const backTextConfig = {
+        backGift: (C.botoesVoltar.presentes||{}).mostrarTexto !== false,
+        backDress: (C.botoesVoltar.dresscode||{}).mostrarTexto !== false,
+        backManual: (C.botoesVoltar.manual||{}).mostrarTexto !== false,
+        backCountdown: (C.botoesVoltar.contagem||{}).mostrarTexto !== false
+      };
+      function applyBackText(){
+        ["backGift","backDress","backManual","backCountdown"].forEach(key=>{
+          const el=buttons[key]; if(!el) return;
+          el.classList.toggle("text-hidden", !backTextConfig[key]);
+          el.setAttribute("aria-label", C.textos.voltar);
+          el.textContent = backTextConfig[key] ? C.textos.voltar : "";
+          if(document.body.classList.contains("editor-on") && !el.querySelector(".resize")){ const r=document.createElement("span"); r.className="resize"; el.appendChild(r); }
+        });
+      }
+
+      function applyHotspots(){
+        Object.entries(HOTSPOTS).forEach(([key,v])=>{
+          const el = buttons[key]; if(!el || !featureEnabled[key] || !document.body.contains(el)) return;
+          el.style.left = v.left + "%"; el.style.top = v.top + "%";
+          el.style.width = v.width + "%"; el.style.height = v.height + "%";
+        });
+        applyBackText();
+        updateCountdownScale();
+        exportAreas();
+      }
+
+      function updateCountdownScale(){
+        const box = $("countdownBox");
+        if(!box || !document.body.contains(box)) return;
+
+        const rect = box.getBoundingClientRect();
+        if(!rect.width || !rect.height) return;
+
+        // Escala tipografia e espaçamentos proporcionalmente ao próprio bloco.
+        // Assim, ao diminuir o contador no editor, tudo reduz junto sem se sobrepor.
+        const cellWidth = rect.width / 5;
+        const valueSize = Math.max(9, Math.min(cellWidth * 0.47, rect.height * 0.42));
+        const labelSize = Math.max(5, Math.min(cellWidth * 0.17, rect.height * 0.14));
+        const gap = Math.max(2, Math.min(cellWidth * 0.08, 10));
+        const labelGap = Math.max(2, Math.min(rect.height * 0.045, 7));
+        const padding = Math.max(2, Math.min(rect.height * 0.055, 10));
+
+        box.style.setProperty("--count-value-size", valueSize + "px");
+        box.style.setProperty("--count-label-size", labelSize + "px");
+        box.style.setProperty("--count-gap", gap + "px");
+        box.style.setProperty("--count-label-gap", labelGap + "px");
+        box.style.setProperty("--count-padding", padding + "px");
+      }
+
+      const buildScreens = ()=>{
+        const list = ["opening"];
+        if(hasVideo) list.push("videoScreen");
+        list.push("mainScreen");
+        if(hasGift) list.push("giftScreen");
+        if(hasDress) list.push("dressScreen");
+        if(hasManual) list.push("manualScreen");
+        if(hasCountdown) list.push("countdownScreen");
+        return list.map($);
+      };
+      const screens = buildScreens();
+      const video = $("videoPlayer");
+      const music = $("music");
+
+      if(window.ResizeObserver && $("countdownBox")){
+        const countdownResizeObserver = new ResizeObserver(updateCountdownScale);
+        countdownResizeObserver.observe($("countdownBox"));
+      }
+      window.addEventListener("resize", updateCountdownScale);
+
+      function show(id){
+        screens.forEach(s=>{ if(s) s.classList.remove("active","fade-in","fade-out"); });
+        const next = $(id); if(!next) return;
+        next.classList.add("active");
+        if(id === "mainScreen") next.classList.add("fade-in");
+        if(id === "countdownScreen") requestAnimationFrame(updateCountdownScale);
+      }
+
+      // ---- MÚSICA (desbloqueio no toque, compatível com iPhone) ----------
+      const MUSIC_VOLUME = Math.max(0, Math.min(1, C.musica.volume || 0));
+      let musicStarted = false, musicFadeTimer = null;
+      function fadeMusicTo(target){
+        clearInterval(musicFadeTimer);
+        music.volume = Math.min(music.volume || 0.001, target);
+        musicFadeTimer = setInterval(()=>{
+          music.volume = Math.min(target, (music.volume || 0) + 0.025);
+          if(music.volume >= target) clearInterval(musicFadeTimer);
+        }, 120);
+      }
+      async function startMusic(force){
+        try{
+          // Se a música já estiver tocando, mantém a reprodução contínua.
+          if(musicStarted && !music.paused){
+            document.body.classList.remove("need-music");
+            return true;
+          }
+
+          music.muted = false;
+          // Começa praticamente inaudível para evitar um pico de volume no iPhone
+          // antes de aplicar o volume configurado.
+          music.volume = 0.001;
+          await music.play();
+
+          // Confirma que o navegador realmente iniciou a reprodução.
+          await new Promise(resolve => setTimeout(resolve, 180));
+          if(music.paused){
+            throw new Error("A reprodução da música foi bloqueada.");
+          }
+
+          musicStarted = true;
+          document.body.classList.remove("need-music");
+          fadeMusicTo(MUSIC_VOLUME);
+          return true;
+        }catch(e){
+          musicStarted = false;
+
+          // Só mostra o botão quando a tentativa realmente falhar.
+          document.body.classList.add("need-music");
+          return false;
+        }
+      }
+      function ensureMusicButton(){
+        if(!musicStarted || music.paused){
+          document.body.classList.add("need-music");
+        }
+      }
+
+      // ---- FLUXO ENTRE TELAS ---------------------------------------------
+      function goMain(){
+        if($("mainScreen").classList.contains("active")) return;
+        if(hasVideo) video.pause();
+
+        const openMain = ()=>{
+          show("mainScreen");
+
+          // Só tenta iniciar novamente se a música realmente estiver parada.
+          // Assim ela continua do ponto atual ao sair do vídeo.
+          if(!musicStarted || music.paused){
+            startMusic(true).then((ok)=>{
+              if(!ok) document.body.classList.add("need-music");
+            });
+          }
+        };
+
+        if(hasVideo){
+          $("videoScreen").classList.add("fade-out");
+          setTimeout(openMain, 520);
+        } else {
+          openMain();
+        }
+      }
+
+      // Toque na abertura: chama música e vídeo imediatamente no mesmo gesto.
+      // Isso aumenta a compatibilidade com Safari/iPhone.
+      $("opening").addEventListener("click", ()=>{
+        // Começa sempre com o botão escondido.
+        // Ele só aparece quando a tentativa de tocar o MP3 realmente falhar.
+        document.body.classList.remove("need-music");
+
+        if(hasVideo){
+          show("videoScreen");
+          video.volume = 1;
+
+          // Música e vídeo são solicitados imediatamente no mesmo gesto.
+          const musicPromise = startMusic(false);
+          const videoPromise = video.play();
+
+          Promise.resolve(musicPromise).then((ok)=>{
+            if(!ok) document.body.classList.add("need-music");
+          });
+
+          Promise.resolve(videoPromise)
+            .catch(()=>{
+              goMain();
+              ensureMusicButton();
+            });
+        } else {
+          startMusic(false).then((ok)=>{
+            if(!ok) document.body.classList.add("need-music");
+          });
+          goMain();
+        }
+      }, {once:true});
+
+      if(hasVideo){
+        video.addEventListener("ended", goMain);
+        video.addEventListener("error", goMain);
+        $("skipBtn").addEventListener("click", goMain);
+      }
+
+      // ---- BOTÕES DA TELA PRINCIPAL --------------------------------------
+      if(hasWhatsapp && $("confirmBtn")){
+        $("confirmBtn").addEventListener("click", (e)=>{
+          if(document.body.classList.contains("editor-on")) return;
+          e.preventDefault(); e.stopPropagation();
+          const num = (C.whatsapp.numero || "").replace(/\D/g,"");
+          const msg = encodeURIComponent(C.whatsapp.mensagem || "");
+          window.open("https://wa.me/" + num + "?text=" + msg, "_blank");
+        });
+      }
+      if(hasMap && $("mapBtn")){
+        $("mapBtn").addEventListener("click", (e)=>{
+          if(document.body.classList.contains("editor-on")) return;
+          e.preventDefault(); e.stopPropagation();
+          window.open(C.mapa || "#", "_blank");
+        });
+      }
+      if(hasGift && $("giftBtn")){
+        $("giftBtn").addEventListener("click", (e)=>{
+          if(document.body.classList.contains("editor-on")) return;
+          e.preventDefault(); e.stopPropagation();
+          show("giftScreen");
+        });
+        $("backBtn")?.addEventListener("click", ()=> show("mainScreen"));
+      }
+      if(hasPix && $("pixCopyBtn")){
+        $("pixCopyBtn").addEventListener("click", async(e)=>{
+          if(document.body.classList.contains("editor-on")) return;
+          e.preventDefault(); e.stopPropagation();
+          const value = String(C.pix.chave || "");
+          if(!value) return;
+          let copied = false;
+          try{ await navigator.clipboard.writeText(value); copied = true; }
+          catch(err){
+            const ta=document.createElement("textarea");
+            ta.value=value; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0";
+            document.body.appendChild(ta); ta.select();
+            try{ copied = document.execCommand("copy"); }catch(_e){}
+            ta.remove();
+          }
+          if(copied){
+            const toast=$("copyToast");
+            toast?.classList.add("show");
+            clearTimeout(window.__pixToastTimer);
+            window.__pixToastTimer=setTimeout(()=>toast?.classList.remove("show"),1800);
+          }
+        });
+      }
+      if(hasDress && $("dressBtn")){
+        $("dressBtn").addEventListener("click", (e)=>{
+          if(document.body.classList.contains("editor-on")) return;
+          e.preventDefault(); e.stopPropagation();
+          show("dressScreen");
+        });
+        $("dressBackBtn")?.addEventListener("click", ()=> show("mainScreen"));
+      }
+      if(hasManual && $("manualBtn")){
+        $("manualBtn").addEventListener("click", (e)=>{
+          if(document.body.classList.contains("editor-on")) return;
+          e.preventDefault(); e.stopPropagation();
+          show("manualScreen");
+        });
+        $("manualBackBtn")?.addEventListener("click", ()=> show("mainScreen"));
+      }
+      if(hasCountdown && $("countdownBtn")){
+        $("countdownBtn").addEventListener("click", (e)=>{
+          if(document.body.classList.contains("editor-on")) return;
+          e.preventDefault(); e.stopPropagation();
+          show("countdownScreen");
+          updateCountdown();
+        });
+        $("countdownBackBtn")?.addEventListener("click", ()=> show("mainScreen"));
+      }
+      musicUnlock.addEventListener("click", async()=>{
+        document.body.classList.remove("need-music");
+        const ok = await startMusic(true);
+        if(!ok) document.body.classList.add("need-music");
+      });
+      document.addEventListener("visibilitychange", ()=>{
+        if(!document.hidden && musicStarted && music.paused) startMusic(false);
+      });
+
+      // ---- CONTAGEM REGRESSIVA ---------------------------------------------
+      let countdownTimer = null;
+      function pad2(n){ return String(Math.max(0, n)).padStart(2, "0"); }
+      function addMonthsClamped(date, months){
+        const d = new Date(date);
+        const originalDay = d.getDate();
+        d.setDate(1);
+        d.setMonth(d.getMonth() + months);
+        const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+        d.setDate(Math.min(originalDay, lastDay));
+        return d;
+      }
+      function calendarDiff(now, target){
+        if(target <= now) return {months:0,days:0,hours:0,minutes:0,seconds:0,ended:true};
+        let months = (target.getFullYear()-now.getFullYear())*12 + target.getMonth()-now.getMonth();
+        let cursor = addMonthsClamped(now, months);
+        if(cursor > target){ months--; cursor = addMonthsClamped(now, months); }
+        let ms = target - cursor;
+        const days = Math.floor(ms/86400000); ms %= 86400000;
+        const hours = Math.floor(ms/3600000); ms %= 3600000;
+        const minutes = Math.floor(ms/60000); ms %= 60000;
+        const seconds = Math.floor(ms/1000);
+        return {months,days,hours,minutes,seconds,ended:false};
+      }
+      function updateCountdown(){
+        if(!hasCountdown) return;
+        const target = new Date(C.contagem.dataEvento);
+        const box = $("countdownBox");
+        if(Number.isNaN(target.getTime())){
+          box.innerHTML = '<div class="countdown-message">Confira a data no config.js</div>';
+          return;
+        }
+        const diff = calendarDiff(new Date(), target);
+        if(diff.ended){
+          box.innerHTML = '<div class="countdown-message"></div>';
+          box.querySelector(".countdown-message").textContent = C.contagem.textoFinal || "A festa começou!";
+          return;
+        }
+        const values = {
+          countMonths: diff.months,
+          countDays: diff.days,
+          countHours: diff.hours,
+          countMinutes: diff.minutes,
+          countSeconds: diff.seconds
+        };
+        Object.entries(values).forEach(([id,value])=>{ const el=$(id); if(el) el.textContent=pad2(value); });
+      }
+      if(hasCountdown){
+        updateCountdown();
+        countdownTimer = setInterval(updateCountdown, 1000);
+      }
+
+      // ====================================================================
+      // EDITOR VISUAL (?editor=1) — mostra somente recursos ativos
+      // ====================================================================
+      const editorLabels = {
+        confirm:"WhatsApp",
+        map:"Localização",
+        gift:"Presentes",
+        pix:"PIX (copiar chave)",
+        dress:"Dress Code",
+        manual:"Manual do Convidado",
+        countdown:"Contagem (botão)",
+        counter:"Contador (na tela)",
+        backGift:"Voltar — Presentes",
+        backDress:"Voltar — Dress Code",
+        backManual:"Voltar — Manual do Convidado",
+        backCountdown:"Voltar — Contagem"
+      };
+      const areaSelect = $("areaSelect");
+      areaSelect.innerHTML = "";
+      Object.keys(editorLabels).forEach(key=>{
+        if(!featureEnabled[key] || !HOTSPOTS[key]) return;
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = editorLabels[key];
+        areaSelect.appendChild(option);
+      });
+      applyHotspots();
+      const params = new URLSearchParams(location.search);
+      let selected = areaSelect.value || Object.keys(HOTSPOTS)[0] || "confirm";
+
+      function editorScreenFor(key){
+        if(key === "counter" || key === "backCountdown") return "countdownScreen";
+        if(key === "pix" || key === "backGift") return "giftScreen";
+        if(key === "backDress") return "dressScreen";
+        if(key === "backManual") return "manualScreen";
+        return "mainScreen";
+      }
+      const editorPanel = $("editorPanel");
+      const editorDragHandle = $("editorDragHandle");
+      const centerEditorBtn = $("centerEditor");
+      let editorDragState = null;
+
+      function clampEditorPanel(left, top){
+        const rect = editorPanel.getBoundingClientRect();
+        const maxLeft = Math.max(0, window.innerWidth - rect.width);
+        const maxTop = Math.max(0, window.innerHeight - rect.height);
+        return { left: Math.max(0, Math.min(maxLeft, left)), top: Math.max(0, Math.min(maxTop, top)) };
+      }
+
+      function setEditorPanelPosition(left, top){
+        const pos = clampEditorPanel(left, top);
+        editorPanel.style.left = pos.left + "px";
+        editorPanel.style.top = pos.top + "px";
+        editorPanel.style.right = "auto";
+        editorPanel.style.bottom = "auto";
+        editorPanel.style.margin = "0";
+      }
+
+      function centerEditorPanel(){
+        editorPanel.style.left = "12px";
+        editorPanel.style.right = "12px";
+        editorPanel.style.top = "12px";
+        editorPanel.style.bottom = "auto";
+        editorPanel.style.margin = "auto";
+      }
+
+      editorDragHandle?.addEventListener("pointerdown", (e)=>{
+        if(e.target.closest("button")) return;
+        e.preventDefault();
+        const rect = editorPanel.getBoundingClientRect();
+        editorDragState = { pointerId:e.pointerId, startX:e.clientX, startY:e.clientY, left:rect.left, top:rect.top };
+        editorPanel.classList.add("dragging");
+        editorDragHandle.setPointerCapture(e.pointerId);
+      });
+
+      editorDragHandle?.addEventListener("pointermove", (e)=>{
+        if(!editorDragState || e.pointerId !== editorDragState.pointerId) return;
+        setEditorPanelPosition(editorDragState.left + (e.clientX-editorDragState.startX), editorDragState.top + (e.clientY-editorDragState.startY));
+      });
+
+      function stopEditorDrag(e){
+        if(!editorDragState || (e && e.pointerId !== editorDragState.pointerId)) return;
+        editorDragState = null;
+        editorPanel.classList.remove("dragging");
+      }
+      editorDragHandle?.addEventListener("pointerup", stopEditorDrag);
+      editorDragHandle?.addEventListener("pointercancel", stopEditorDrag);
+      centerEditorBtn?.addEventListener("click", centerEditorPanel);
+      window.addEventListener("resize", ()=>{
+        if(editorPanel.style.right === "auto"){
+          const rect = editorPanel.getBoundingClientRect();
+          setEditorPanelPosition(rect.left, rect.top);
+        }
+      });
+
+      function openEditor(){ show(editorScreenFor(selected)); document.body.classList.add("editor-on","can-edit"); selectArea(selected); }
+      function closeEditor(){ document.body.classList.remove("editor-on"); }
+      $("editOpen").addEventListener("click", openEditor);
+      $("closeEditor").addEventListener("click", closeEditor);
+      if(params.has("editor")) openEditor();
+      $("areaSelect").addEventListener("change", e=>selectArea(e.target.value));
+
+      function selectArea(key){
+        if(!HOTSPOTS[key] || !featureEnabled[key]) return;
+        selected = key; $("areaSelect").value = key;
+        if(document.body.classList.contains("editor-on")) show(editorScreenFor(key));
+        Object.values(buttons).forEach(b=>b.classList.remove("selected"));
+        if(buttons[key]) buttons[key].classList.add("selected");
+        const isBack = key.startsWith("back");
+        $("backTextRow").style.display = isBack ? "flex" : "none";
+        if(isBack) $("showBackText").checked = backTextConfig[key] !== false;
+        fillInputs();
+      }
+      function fillInputs(){
+        const v = HOTSPOTS[selected] || {left:0,top:0,width:0,height:0};
+        $("inpL").value = v.left; $("inpT").value = v.top;
+        $("inpW").value = v.width; $("inpH").value = v.height;
+      }
+      ["inpL","inpT","inpW","inpH"].forEach(id=>$(id).addEventListener("input",()=>{
+        HOTSPOTS[selected] = {left:+$("inpL").value, top:+$("inpT").value, width:+$("inpW").value, height:+$("inpH").value};
+        applyHotspots();
+      }));
+
+      Object.entries(buttons).forEach(([key,el])=>{
+        if(!el) return;
+        if(!el.querySelector(".resize")){
+          const resizeHandle = document.createElement("span");
+          resizeHandle.className = "resize";
+          el.appendChild(resizeHandle);
+        }
+        el.addEventListener("pointerdown", e=>{
+          if(!document.body.classList.contains("editor-on")) return;
+          e.preventDefault(); e.stopPropagation(); selectArea(key);
+          const stageEl = key === "counter" ? $("countdownStage") :
+            key === "pix" ? $("giftStage") :
+            key === "backGift" ? $("giftStage") :
+            key === "backDress" ? $("dressStage") :
+            key === "backManual" ? $("manualStage") :
+            key === "backCountdown" ? $("countdownStage") : $("mainStage");
+          const stage = stageEl.getBoundingClientRect();
+          const start = Object.assign({x:e.clientX, y:e.clientY}, HOTSPOTS[key]);
+          const resize = e.target.classList.contains("resize");
+          el.setPointerCapture(e.pointerId);
+          function move(ev){
+            const dx = (ev.clientX-start.x)/stage.width*100;
+            const dy = (ev.clientY-start.y)/stage.height*100;
+            if(resize){
+              HOTSPOTS[key].width  = Math.max(3, Math.min(100-HOTSPOTS[key].left, start.width+dx));
+              HOTSPOTS[key].height = Math.max(3, Math.min(100-HOTSPOTS[key].top,  start.height+dy));
+            } else {
+              HOTSPOTS[key].left = Math.max(0, Math.min(100-start.width,  start.left+dx));
+              HOTSPOTS[key].top  = Math.max(0, Math.min(100-start.height, start.top+dy));
+            }
+            applyHotspots(); fillInputs();
+          }
+          function up(){ el.removeEventListener("pointermove",move); el.removeEventListener("pointerup",up); }
+          el.addEventListener("pointermove",move); el.addEventListener("pointerup",up);
+        });
+      });
+
+      $("saveAreas").addEventListener("click",()=>{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(HOTSPOTS));
+        alert("Áreas salvas neste navegador. Para deixar permanente no GitHub, copie o código e cole no config.js.");
+      });
+      $("resetAreas").addEventListener("click",()=>{
+        HOTSPOTS = {};
+        Object.entries(C.hotspots || {}).forEach(([key,value])=>{
+          if(featureEnabled[key]) HOTSPOTS[key] = JSON.parse(JSON.stringify(value));
+        });
+        if(hasPix) HOTSPOTS.pix = JSON.parse(JSON.stringify(C.pix.posicao));
+      if(hasCountdown) HOTSPOTS.counter = JSON.parse(JSON.stringify(C.contagem.posicao));
+      if(hasGift) HOTSPOTS.backGift = JSON.parse(JSON.stringify((C.botoesVoltar.presentes||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
+      if(hasDress) HOTSPOTS.backDress = JSON.parse(JSON.stringify((C.botoesVoltar.dresscode||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
+      if(hasManual) HOTSPOTS.backManual = JSON.parse(JSON.stringify((C.botoesVoltar.manual||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
+      if(hasCountdown) HOTSPOTS.backCountdown = JSON.parse(JSON.stringify((C.botoesVoltar.contagem||{}).posicao || {left:3.7,top:1.5,width:20,height:6}));
+        localStorage.removeItem(STORAGE_KEY);
+        applyHotspots(); fillInputs();
+      });
+      // Gera código pronto para colar dentro de CONFIG.hotspots no config.js
+      function exportAreas(){
+        const indent = "    ";
+        const buttonEntries = Object.entries(HOTSPOTS).filter(([k])=>k !== "counter" && k !== "pix" && !k.startsWith("back"));
+        const lines = buttonEntries.map(([k,v])=>{
+          return indent + indent + k + ": { left:" + v.left + ", top:" + v.top + ", width:" + v.width + ", height:" + v.height + " }";
+        }).join(",\n");
+        const c = HOTSPOTS.counter;
+        const backCode = "\n\nbotoesVoltar: {\n" +
+          (hasGift ? "    presentes: { mostrarTexto:"+backTextConfig.backGift+", posicao: "+JSON.stringify(HOTSPOTS.backGift)+" },\n" : "") +
+          (hasDress ? "    dresscode: { mostrarTexto:"+backTextConfig.backDress+", posicao: "+JSON.stringify(HOTSPOTS.backDress)+" },\n" : "") +
+          (hasManual ? "    manual: { mostrarTexto:"+backTextConfig.backManual+", posicao: "+JSON.stringify(HOTSPOTS.backManual)+" },\n" : "") +
+          (hasCountdown ? "    contagem: { mostrarTexto:"+backTextConfig.backCountdown+", posicao: "+JSON.stringify(HOTSPOTS.backCountdown)+" }\n" : "") +
+          "  },";
+        const pixCode = hasPix && HOTSPOTS.pix ?
+          "\n\npix: {\n" +
+          "    ativo: true,\n" +
+          "    chave: " + JSON.stringify(String(C.pix.chave || "")) + ",\n" +
+          "    posicao: " + JSON.stringify(HOTSPOTS.pix) + "\n" +
+          "  }," : "";
+        const countdownCode = hasCountdown && c ?
+          "\n\ncontagem: {\n" +
+          "    dataEvento: \"" + C.contagem.dataEvento + "\",\n" +
+          "    textoFinal: \"" + String(C.contagem.textoFinal || "").replace(/\"/g,'\\\"') + "\",\n" +
+          "    corNumero: \"" + C.contagem.corNumero + "\",\n" +
+          "    corLegenda: \"" + C.contagem.corLegenda + "\",\n" +
+          "    posicao: { left:" + c.left + ", top:" + c.top + ", width:" + c.width + ", height:" + c.height + " }\n" +
+          "  }" : "";
+        $("exportBox").value = "hotspots: {\n" + lines + "\n  }," + pixCode + backCode + countdownCode;
+        /* legacy export removed */
+        return;
+        $("exportBox").value =
+          "hotspots: {\n" + lines + "\n  },\n\n" +
+          "contagem: {\n" +
+          "    dataEvento: \"" + C.contagem.dataEvento + "\",\n" +
+          "    textoFinal: \"" + String(C.contagem.textoFinal || "").replace(/\"/g,'\\\"') + "\",\n" +
+          "    corNumero: \"" + C.contagem.corNumero + "\",\n" +
+          "    corLegenda: \"" + C.contagem.corLegenda + "\",\n" +
+          "    posicao: { left:" + c.left + ", top:" + c.top + ", width:" + c.width + ", height:" + c.height + " }\n" +
+          "  }";
+      }
+      $("copyAreas").addEventListener("click", async()=>{
+        exportAreas(); $("exportBox").select();
+        try{ await navigator.clipboard.writeText($("exportBox").value); alert("Código copiado. Cole dentro do objeto CONFIG no arquivo config.js."); }
+        catch(e){ document.execCommand("copy"); }
+      });
+    })();
+  </script>
 </body>
 </html>
