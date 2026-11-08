@@ -1,77 +1,48 @@
-# Engine V4 Modular — Convite Premium
+# Convite Digital — Marcella 15 anos
 
-Esta versão mantém a correção de áudio para iPhone/Safari e permite ativar ou desativar cada recurso pelo `config.js`.
+Projeto estático para GitHub Pages, com abertura, página principal e telas de Presentes, Dress Code e Manual do Convidado.
 
-## Recursos modulares
+## Dados do evento
+- Aniversariante: Marcella
+- Data: 27/02/2027
+- Horário: 20h
+- WhatsApp configurado: `5511930389976`
+- Localização: link do Google Maps configurado em `config.js`
 
-```js
-telas: {
-  video: true,
-  whatsapp: true,
-  localizacao: true,
-  presentes: true,
-  dresscode: true,
-  contagem: true
-}
-```
-
-Use `false` para remover um recurso. A Engine remove automaticamente:
-
-- a área clicável invisível;
-- a tela relacionada;
-- a opção correspondente do editor;
-- qualquer posição antiga salva no navegador para aquele recurso.
-
-Exemplo de convite somente com localização e contagem:
-
-```js
-telas: {
-  video: true,
-  whatsapp: false,
-  localizacao: true,
-  presentes: false,
-  dresscode: false,
-  contagem: true
-}
-```
-
-## Arquivos de arte
-
-- `assets/opening.webp`
-- `assets/principal.webp`
-- `assets/presentes.webp`, quando Presentes estiver ativo
-- `assets/dresscode.webp`, quando Dress Code estiver ativo
-- `assets/contagem.webp`, quando Contagem estiver ativa
-- `assets/video.mp4`, quando Vídeo estiver ativo
-- `assets/musica.mp3`
-- `assets/preview-whatsapp.jpg`
+## Estrutura
+- `index.html`: telas, metadados Open Graph/Twitter e estrutura do editor.
+- `styles.css`: responsividade, tela cheia e aparência do editor.
+- `app.js`: navegação, confirmação WhatsApp, localização e editor de áreas.
+- `config.js`: dados do evento, links, mensagens, posições e visibilidade dos hotspots.
+- `assets/opening.webp`: abertura vertical.
+- `assets/principal.webp`: convite principal.
+- `assets/presentes.webp`: sugestões de presentes.
+- `assets/dresscode.webp`: traje esporte fino; evitar azul-marinho e rosa.
+- `assets/manual.webp`: manual do convidado com início às 20h.
+- `assets/preview-whatsapp.jpg`: imagem horizontal Open Graph em 1200 × 630.
 
 ## Editor
+Abra o endereço com `?editor=1`:
+`https://premium-invites.github.io/Convite-Marcella-15-anos/?editor=1`
 
-Abra o convite com `?editor=1` no final do endereço. O editor mostra somente os recursos ligados no `config.js`.
+- Selecione um botão no menu ou toque na marcação sobre a arte.
+- Arraste para mover; arraste a alça no canto para redimensionar.
+- Altere posição, tamanho, rótulo e visibilidade no painel.
+- “Salvar neste navegador” guarda apenas no navegador atual.
+- “Copiar configuração” copia o objeto completo para substituir `hotspots` em `config.js`.
+- Botões ocultos continuam selecionáveis no editor para que possam ser reativados.
 
-Na tela de contagem existem duas áreas editáveis:
+## Publicação no GitHub Pages
+1. Extraia o ZIP.
+2. Envie `index.html`, `styles.css`, `app.js`, `config.js`, `.nojekyll` e a pasta `assets/` para a raiz do repositório `premium-invites/Convite-Marcella-15-anos`.
+3. Em Settings → Pages, mantenha a publicação pela branch `main`, pasta `/ (root)`.
+4. Aguarde o deploy e teste o endereço público em celular e computador.
 
-- `Contagem (botão)`: hotspot da tela principal;
-- `Contador (na tela)`: posição e tamanho do contador sobre `contagem.webp`.
+## WhatsApp
+A confirmação abre `https://wa.me/` com o número e a mensagem configurados em `config.js`. O texto é codificado por `encodeURIComponent`, evitando que acentos e espaços sejam perdidos.
 
-## Música no iPhone
+## Prévia do WhatsApp
+As tags `og:title`, `og:description`, `og:url`, `og:image` e Twitter Card já usam a URL do projeto Marcella e `assets/preview-whatsapp.jpg`. A imagem deve estar pública no GitHub Pages. O WhatsApp pode manter uma prévia antiga em cache por algum tempo; teste novamente após a publicação.
 
-A V4 preserva o desbloqueio de áudio da V3. Caso o Safari bloqueie o MP3, aparece o botão **Ativar música** sem reiniciar o convite.
-
-## Botões de voltar móveis
-No editor `?editor=1`, selecione **Voltar — Presentes**, **Voltar — Dress Code** ou **Voltar — Contagem** para mover e redimensionar cada área.
-A opção **Mostrar texto “Voltar”** pode ser desmarcada. O texto e o visual do botão somem, mas a área continua clicável sobre a arte.
-
-
-## Manual do Convidado
-
-Para usar esta tela, coloque sua arte em `assets/manual.webp` e deixe `manual: true` dentro de `telas` no `config.js`. A área do botão e o botão Voltar podem ser ajustados em `?editor=1`.
-
-## Ajustes da contagem regressiva
-
-- O botão da contagem usa o hotspot `countdown`.
-- A Engine também aceita `contagem` por compatibilidade.
-- A cor dos números é alterada em `contagem.corNumero` no `config.js`.
-- A cor das legendas é alterada em `contagem.corLegenda`.
-- O contador redimensiona números, legendas e espaçamentos proporcionalmente ao bloco, evitando sobreposição.
+## Nota sobre mídia original
+Esta reconstrução usa abertura estática em imagem e não inclui os arquivos de vídeo/áudio do ZIP original. Caso queira preservar uma abertura em vídeo ou música de fundo, esses arquivos precisam ser reintegrados à pasta `assets/` e a navegação deve ser ajustada para eles.

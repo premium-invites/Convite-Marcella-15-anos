@@ -1,0 +1,38 @@
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{color-scheme:dark}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#030914;font-family:Georgia,"Times New Roman",serif}
+body{min-height:100dvh}
+.screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;overflow:hidden;background:#030914}
+.screen.active{display:flex}
+.screen::before{content:"";position:absolute;inset:-28px;background:var(--screen-bg) center/cover no-repeat;filter:blur(24px) brightness(.48);transform:scale(1.06);opacity:.92}
+.stage{position:relative;z-index:1;width:min(100vw,56.25dvh);height:100dvh;max-width:100vw;max-height:100dvh;overflow:hidden;background:#06142a;box-shadow:0 0 45px #0008}
+.art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;user-select:none;-webkit-user-drag:none;z-index:1}
+.opening-action{position:absolute;z-index:4;left:17%;right:17%;bottom:5.8%;min-height:48px;border:1px solid rgba(255,225,160,.95);border-radius:999px;color:#fff1d0;background:linear-gradient(180deg,rgba(7,23,44,.94),rgba(2,10,22,.94));box-shadow:0 0 18px rgba(223,174,78,.34),inset 0 0 10px rgba(255,255,255,.1);font:700 13px/1.2 system-ui,sans-serif;letter-spacing:.09em;cursor:pointer}
+.hotspot{position:absolute;z-index:5;display:block;padding:0;border:0;border-radius:12px;background:transparent;color:transparent;cursor:pointer;touch-action:pan-y}
+.back-hotspot{z-index:6}
+.edit-open{display:none;position:fixed;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:40;border:1px solid #f4d38d;border-radius:999px;padding:11px 15px;color:#241706;background:linear-gradient(#fff0c9,#d9a448);font:700 13px system-ui,sans-serif;box-shadow:0 5px 20px #0008}
+body.can-edit .edit-open{display:block}
+body.editor-mode .edit-open{display:none}
+.editor-panel{position:fixed;z-index:60;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;max-width:560px;max-height:46dvh;overflow:auto;margin:0 auto;padding:12px;border:1px solid #dcae58;border-radius:16px;color:#f8edcf;background:rgba(5,17,34,.97);box-shadow:0 12px 34px #000b;font:12px/1.4 system-ui,sans-serif}
+.editor-panel[hidden]{display:none}
+.editor-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.editor-head strong{font-size:15px;color:#ffe2a0}
+.editor-help{margin:7px 0;color:#d8c9a7}
+.editor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.editor-grid label{display:flex;flex-direction:column;gap:4px;color:#e8d9b7}
+.editor-grid .wide{grid-column:1/-1}
+.editor-grid input,.editor-grid select{width:100%;min-width:0;padding:8px;border:1px solid #c99c51;border-radius:8px;color:#13233a;background:#fff8e8;font:600 13px system-ui,sans-serif}
+.editor-grid .visibility{flex-direction:row;align-items:center;padding:6px 0}
+.editor-grid .visibility input{width:auto}
+.editor-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.editor-actions button,.small-button{border:1px solid #f2d18d;border-radius:8px;padding:8px 10px;color:#1e170b;background:linear-gradient(#fff0c8,#dba84f);font:700 12px system-ui,sans-serif;cursor:pointer}
+#exportCode{display:block;width:100%;min-height:76px;margin-top:8px;padding:8px;border:1px solid #6f5a37;border-radius:8px;color:#f9edce;background:#071326;font:10px/1.35 ui-monospace,monospace}
+.editor-status{min-height:1em;margin:6px 0 0;color:#c7f3ce}
+body.editor-mode .hotspot{z-index:20;border:2px dashed rgba(255,241,193,.95);border-radius:10px;background:rgba(14,176,220,.18);color:#fff;display:flex;align-items:flex-start;justify-content:flex-start;padding:4px;font:800 10px/1.2 system-ui,sans-serif;text-align:left;text-shadow:0 1px 3px #000;overflow:visible}
+body.editor-mode .hotspot[data-hidden="true"]{opacity:.5;background:rgba(230,150,30,.18);border-style:dotted}
+body.editor-mode .hotspot.selected{outline:3px solid #fff;background:rgba(24,202,255,.34)}
+.resize-handle{display:none}
+body.editor-mode .resize-handle{display:block;position:absolute;right:-8px;bottom:-8px;width:18px;height:18px;border:2px solid #fff;border-radius:50%;background:#08a6c5;box-shadow:0 2px 8px #0008;cursor:nwse-resize}
+@media (max-width:420px){.editor-panel{max-height:48dvh;padding:10px}.editor-grid{gap:6px}.editor-actions button{padding:7px 8px;font-size:11px}}
+@media (max-aspect-ratio:9/16){.stage{width:100vw;height:100dvh}}
+@media (min-aspect-ratio:9/16){.screen::before{filter:blur(30px) brightness(.42)}}

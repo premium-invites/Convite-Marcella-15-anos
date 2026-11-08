@@ -1,0 +1,11 @@
+PACOTE RECONSTRUÍDO — MARCELLA 15 ANOS
+
+Ajustes incluídos:
+- imagens verticais em proporção 9:16, com fundo estendido para preencher a tela;
+- editor com seleção por menu e clique, arrastar, redimensionar e ocultar/exibir hotspots;
+- confirmação WhatsApp com mensagem personalizada e número configurado;
+- metadados Open Graph/Twitter apontando para o convite da Marcella;
+- páginas Presentes, Dress Code e Manual com retorno clicável.
+
+Para instruções de publicação e edição, consulte README.md.
+Observação: esta versão usa abertura estática; os arquivos de vídeo/música do pacote original não foram incluídos.
